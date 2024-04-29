@@ -15,9 +15,19 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    blogService
+      .getAll().then(initialBlogs => {
+        setBlogs(initialBlogs)
+      })
+  }, [])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
   const showError = (message) => {
@@ -39,13 +49,28 @@ const App = () => {
 
     try {
       const user = await loginService.login({username, password,})
+      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
-      setPassword('')
-      showSuccess(`Welcome ${user.name}`)
     } catch(exception) {
       showError('Wrong credentials')
+    }
+
+  }
+
+  const handleLogout = async (event) => {
+    event.preventDefault()
+
+    try {
+      showSuccess('Logged out')
+      window.localStorage.clear()
+      blogService.setToken(null)
+      setUser(null)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      showError('Failed to logout')
     }
 
   }
@@ -87,6 +112,7 @@ const App = () => {
       ) : (
         <div>
           <p>{user.name} logged in</p>
+          <button onClick={handleLogout}>logout</button>
           {blogForm()}
         </div>
       
