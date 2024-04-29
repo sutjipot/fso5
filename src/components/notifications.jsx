@@ -1,8 +1,8 @@
-export const errorNotification = ({ message }) => {
+export const ErrorNotification = ({ message }) => {
     if (message === '') return null
-    return <div>{message}</div>
+    return <div className={`notification error ${!message ? 'hidden' : ''}`}>{message}</div>
 }
-export const successNotification = ({ message }) => {
+export const SuccessNotification = ({ message }) => {
     if (message === '') return null
-    return <div>{message}</div>
+    return <div className={`notification success ${!message ? 'hidden' : ''}`}>{message}</div>
 }
