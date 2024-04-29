@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import { ErrorNotification, SuccessNotification } from './components/notifications'
-// import loginForm from './components/loginForm'
-// import blogForm from './components/blogForm'
+import LoginForm from './components/loginForm'
+import BlogForm from './components/blogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,6 +13,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [errMessage, setErrMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
+  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   // blogs content
   const [title, setTitle] = useState('')  
@@ -120,36 +121,23 @@ const App = () => {
       })
   }
 
-  // login form
-  const loginForm = () => {
-    return <form onSubmit={handleLogin}>
+  // blog form
+  // blog form
+const blogForm = () => {
+  return (
+    <div>
+      {blogFormVisible ? (
         <div>
-            username:
-            <input type="text" value={username} name="username" onChange={({target}) => setUsername(target.value)} />
+          <BlogForm title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} url={url} setUrl={setUrl} handleCreateBlog={handleCreateBlog} />
+          <button onClick={() => setBlogFormVisible(false)}>Cancel</button>
         </div>
-        <div>
-            password:
-            <input type="password" value={password} name="password" onChange={({target}) => setPassword(target.value)} />
-        </div>
-        <button type="submit">login</button>
-    </form>
-  }
-
-  // create blog form
-  const blogForm = () => {
-    return <div>
-      <h3> Create new blogs </h3>
-      <form onSubmit={handleCreateBlog}>
-        <input type="text" value={title} placeholder="Title" name="title" onChange={({target}) => setTitle(target.value)} />
-        <br />
-        <input type="text" value={author} name="author" placeholder="Author" onChange={({target}) => setAuthor(target.value)} />
-        <br />
-        <input type="text" value={url} name="url" placeholder="URL" onChange={({target}) => setUrl(target.value)} />
-        <br />
-        <button type="submit">Create</button>
-      </form>
+      ) : (
+        <button onClick={() => setBlogFormVisible(true)}>Create new blog</button>
+      )}
     </div>
-  }
+  );
+};
+
 
   // show blogs
   const showBlogs = () => {
@@ -168,7 +156,7 @@ const App = () => {
         <h2>Log in to application</h2>
         < ErrorNotification message={errMessage} />
         < SuccessNotification message={successMessage} />
-        {loginForm()}
+        < LoginForm handleLogin={handleLogin} username={username} password={password} setPassword={setPassword} setUsername={setUsername} />
       </div> 
     )
   }
