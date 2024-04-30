@@ -1,14 +1,44 @@
-const BlogForm = ({ title, setTitle, author, setAuthor, url, setUrl, handleCreateBlog }) => {
+import { useState } from "react"
+import { Button, Input } from "./small"
+
+
+export const BlogForm = ({ handleCreateBlog }) => {
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  // handle content changes
+  const handleTitleChange = (event) => setTitle(event.target.value)
+  const handleAuthorChange = (event) => setAuthor(event.target.value)
+  const handleUrlChange = (event) => setUrl(event.target.value)
+  const resetInputs = () => {
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
+  // add blog
+  const addBlog = async (event) => {
+    event.preventDefault()
+
+    createBlog({
+      title: title,
+      author: author,
+      url: url
+    })
+
+    resetInputs()
+  } 
+
     return <div>
       <h3> Create new blogs </h3>
       <form onSubmit={handleCreateBlog}>
-        <input type="text" value={title} placeholder="Title" name="title" onChange={({target}) => setTitle(target.value)} />
+        <Input text="Title" type="text" placeholder="Title" value={title} name="title" onChange={handleTitleChange} />
+        <Input text="Author" type="text" placeholder="Author" value={author} name="author" onChange={handleAuthorChange} />
+        <Input text="URL" type="text" placeholder="URL" value={url} name="url" onChange={handleUrlChange} />
         <br />
-        <input type="text" value={author} name="author" placeholder="Author" onChange={({target}) => setAuthor(target.value)} />
-        <br />
-        <input type="text" value={url} name="url" placeholder="URL" onChange={({target}) => setUrl(target.value)} />
-        <br />
-        <button type="submit">Create</button>
+        <Button type="submit" text="Create" />
       </form>
     </div>
 }
