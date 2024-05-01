@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Button, Input } from "./small"
+import { useState } from 'react'
+import { Button, Input } from './small'
 
 
 export const BlogForm = ({ handleCreateBlog }) => {
@@ -34,18 +34,18 @@ export const BlogForm = ({ handleCreateBlog }) => {
     })
 
     resetInputs()
-  } 
+  }
 
-    return <div>
-      <h3> Create new blogs </h3>
-      <form onSubmit={addBlog}>
-        <Input text="Title" type="text" placeholder="Title" value={title} name="title" onChange={handleTitleChange} />
-        <Input text="Author" type="text" placeholder="Author" value={author} name="author" onChange={handleAuthorChange} />
-        <Input text="URL" type="text" placeholder="URL" value={url} name="url" onChange={handleUrlChange} />
-        <br />
-        <Button style={buttonStyle} type="submit" text="Create" />
-      </form>
-    </div>
+  return <div>
+    <h3> Create new blogs </h3>
+    <form onSubmit={addBlog}>
+      <Input text="Title" type="text" placeholder="Title" value={title} name="title" onChange={handleTitleChange} />
+      <Input text="Author" type="text" placeholder="Author" value={author} name="author" onChange={handleAuthorChange} />
+      <Input text="URL" type="text" placeholder="URL" value={url} name="url" onChange={handleUrlChange} />
+      <br />
+      <Button style={buttonStyle} type="submit" text="Create" />
+    </form>
+  </div>
 }
 
 export default BlogForm

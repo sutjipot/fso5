@@ -11,7 +11,7 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  
+
   const [errMessage, setErrMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
 
@@ -121,7 +121,7 @@ const App = () => {
   // show user
   const showUser = () => {
     return <div>
-      <p>{user.name} logged in</p> <Button style={buttonStyle} onClick={handleLogout} text="Log Out"></Button>
+      <p>{user.name} logged in</p> <Button type='button' style={buttonStyle} onClick={handleLogout} text="Log Out"></Button>
     </div>
   }
 
@@ -139,24 +139,24 @@ const App = () => {
   // login view component
   const loginPage = () => {
     return (
-        < LoginForm handleLogin={handleLogin} />
+      < LoginForm handleLogin={handleLogin} />
     )
   }
 
   // blog view component
   const blogPage = () => {
     return (
-        <div>
+      <div>
 
-          {showUser()}
+        {showUser()}
 
-          <Togglable buttonLabel='Create a new blog' ref={blogFormRef}>
-            <BlogForm handleCreateBlog={handleCreateBlog} />
-          </Togglable>
+        <Togglable buttonLabel='Create a new blog' ref={blogFormRef}>
+          <BlogForm handleCreateBlog={handleCreateBlog} />
+        </Togglable>
 
-          {showBlogs()}
-        </div>
-    );
+        {showBlogs()}
+      </div>
+    )
   }
 
 
@@ -167,11 +167,11 @@ const App = () => {
       <SuccessNotification message={successMessage} />
 
       {user === null ?
-      (
-        loginPage()
-      ) : (
-        blogPage()  
-      )}
+        (
+          loginPage()
+        ) : (
+          blogPage()
+        )}
     </div>
   )
 }
