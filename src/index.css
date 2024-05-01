@@ -22,6 +22,29 @@
   padding: 0px;
 }
 
+.likeButton {
+  border-radius: 5px;
+  cursor: pointer;
+  background: #f4eeff;
+}
+
+.deleteButton {
+  border-radius: 5px;
+  cursor: pointer;
+  background: #f76b8a;
+}
+
+.blogButton {
+  border-radius: 5px;
+  border-color: #424874;
+  cursor: pointer;
+  width: 80%;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+  background: #cadefc; 
+}
+
 html {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
   font-weight: 300;

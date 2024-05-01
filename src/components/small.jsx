@@ -1,8 +1,8 @@
 export const Button = (props) => {
     return (
-    <p>
-        <button type={props.type} onClick={props.onClick}>{props.text}</button>
-    </p>)
+        <button className={props.className} type={props.type} style={props.style} onClick={props.onClick}>{props.text}</button>
+        
+)
 }
 
 export const Input = (props) => {

@@ -15,6 +15,10 @@ const App = () => {
   const [errMessage, setErrMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
 
+  const buttonStyle = {
+    cursor: 'pointer'
+  }
+
   // get all blogs
   useEffect(() => {
     blogService
@@ -88,27 +92,46 @@ const App = () => {
       .create(blogObjects)
       .then(createdBlog => {
         setBlogs(blogs.concat(createdBlog))
-        showSuccess(`A new blog ${createdBlog.title} by ${createdBlog.author} added`)
+        showSuccess(`A new blog "${createdBlog.title}" by ${createdBlog.author} added`)
       })
       .catch(error => {
         showError(`Failed to create a new blog: ${error.response.data.error}`)
       })
   }
 
+  // handle remove blog
+  const handleRemoveBlog = (blogObjects) => {
+    const blogId = blogObjects.id
+    const blogTitle = blogObjects.title
+
+    if (window.confirm(`Remove blog "${blogTitle}" by ${blogObjects.author}`)) {
+      blogService
+        .remove(blogId)
+        .then(() => {
+          setBlogs(blogs.filter(blog => blog.id !== blogId))
+          showSuccess(`Blog "${blogTitle}" by ${blogObjects.author} removed`)
+          setBlogs(blogs.filter(blog => blog.id !== blogId))
+        })
+        .catch(error => {
+          showError(`Failed to remove blog: ${error.response.data.error}`)
+        })
+    }
+  }
+
   // show user
   const showUser = () => {
     return <div>
-      <p>{user.name} logged in</p> <Button onClick={handleLogout} text="Log Out"></Button>
+      <p>{user.name} logged in</p> <Button style={buttonStyle} onClick={handleLogout} text="Log Out"></Button>
     </div>
   }
 
-
   // show blogs
   const showBlogs = () => {
+    blogs.sort((a, b) => b.likes - a.likes)
     return <div>
-      <h3> Blogs </h3>
+      <h3> Click Blog for Details</h3>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} showSuccess={showSuccess} showError={showError} user={user} handleRemoveBlog={handleRemoveBlog} />
       )}
     </div>
   }
@@ -121,20 +144,20 @@ const App = () => {
   }
 
   // blog view component
-const blogPage = () => {
-  return (
-      <div>
+  const blogPage = () => {
+    return (
+        <div>
 
-        {showUser()}
+          {showUser()}
 
-        <Togglable buttonLabel='Create a new blog' ref={blogFormRef}>
-          <BlogForm handleCreateBlog={handleCreateBlog} />
-        </Togglable>
+          <Togglable buttonLabel='Create a new blog' ref={blogFormRef}>
+            <BlogForm handleCreateBlog={handleCreateBlog} />
+          </Togglable>
 
-        {showBlogs()}
-      </div>
-  );
-}
+          {showBlogs()}
+        </div>
+    );
+  }
 
 
   return (

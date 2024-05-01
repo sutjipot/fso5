@@ -9,6 +9,11 @@ export const LoginForm = ({ handleLogin }) => {
     const handleUsernameChange = (event) => setUsername(event.target.value)
     const handlePasswordChange = (event) => setPassword(event.target.value)
 
+    // button style
+    const buttonStyle = {
+        cursor: 'pointer'
+      }
+
     // the login function
     const loginUser = (event) => {
         event.preventDefault()
@@ -29,7 +34,7 @@ export const LoginForm = ({ handleLogin }) => {
                 <Input text="Username" type="text" placeholder="Username" value={username} name="username" onChange={handleUsernameChange} />
                 <Input text="Password" type="password" placeholder="Password" value={password} name="password" onChange={handlePasswordChange} />
                 <br />
-                <Button type="submit" text="Login" />
+                <Button style={buttonStyle} type="submit" text="Login" />
             </form>
         </div>  
     )
