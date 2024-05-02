@@ -1,6 +1,6 @@
 import { Button } from './small'
 import { useState, useEffect } from 'react'
-import {handleLike, handleRemoveBlog} from './BlogActions'
+import { handleLike, handleRemoveBlog } from './BlogActions'
 
 
 export const BlogThings = ({ blog, blogs, setBlogs, showSuccess, showError, user }) => {

@@ -3,7 +3,7 @@ import { Button } from './small'
 import { BlogThings } from './BlogThings'
 
 
-export const Blog = ({ blog, blogs, user, setBlogs, showSuccess, showError}) => {
+export const Blog = ({ blog, blogs, user, setBlogs, showSuccess, showError }) => {
   const [details, setDetails] = useState(false)
   const toggleShow = () => setDetails(!details)
 
