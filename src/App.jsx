@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import { ErrorNotification, SuccessNotification } from './components/notifications'
-import { Button, Input } from './components/small'
+import showMessages from './components/notifications'
+import { Button } from './components/small'
 import { BlogForm } from './components/blogForm'
 import { LoginForm } from './components/loginForm'
 import { Togglable } from './components/togglable'
@@ -12,8 +13,9 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
-  const [errMessage, setErrMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [errMessage, setError] = useState(null)
+  const [successMessage, setSuccess] = useState(null)
+  const { showSuccess, showError } = showMessages(setSuccess, setError)
 
   const buttonStyle = {
     cursor: 'pointer'
@@ -36,22 +38,6 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  // show error message
-  const showError = (message) => {
-    setErrMessage(message)
-    setTimeout(() => {
-      setErrMessage(null)
-    }, 5000)
-  }
-
-  // show success message
-  const showSuccess = (message) => {
-    setSuccessMessage(message)
-    setTimeout(() => {
-      setSuccessMessage(null)
-    }, 5000)
-  }
 
   // handle login
   const handleLogin = (userObjects) => {
@@ -99,25 +85,6 @@ const App = () => {
       })
   }
 
-  // handle remove blog
-  const handleRemoveBlog = (blogObjects) => {
-    const blogId = blogObjects.id
-    const blogTitle = blogObjects.title
-
-    if (window.confirm(`Remove blog "${blogTitle}" by ${blogObjects.author}`)) {
-      blogService
-        .remove(blogId)
-        .then(() => {
-          setBlogs(blogs.filter(blog => blog.id !== blogId))
-          showSuccess(`Blog "${blogTitle}" by ${blogObjects.author} removed`)
-          setBlogs(blogs.filter(blog => blog.id !== blogId))
-        })
-        .catch(error => {
-          showError(`Failed to remove blog: ${error.response.data.error}`)
-        })
-    }
-  }
-
   // show user
   const showUser = () => {
     return <div>
@@ -131,7 +98,15 @@ const App = () => {
     return <div>
       <h3> Click Blog for Details</h3>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} showSuccess={showSuccess} showError={showError} user={user} handleRemoveBlog={handleRemoveBlog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          blogs={blogs}
+          setBlogs={setBlogs}
+          user={user}
+          showSuccess={showSuccess}
+          showError={showError}
+        />
       )}
     </div>
   }
@@ -154,7 +129,7 @@ const App = () => {
           <BlogForm handleCreateBlog={handleCreateBlog} />
         </Togglable>
 
-        {showBlogs()}
+        {blogs.length === 0 ? <p>No blogs available</p> : showBlogs()}
       </div>
     )
   }
@@ -166,12 +141,7 @@ const App = () => {
       <ErrorNotification message={errMessage} />
       <SuccessNotification message={successMessage} />
 
-      {user === null ?
-        (
-          loginPage()
-        ) : (
-          blogPage()
-        )}
+      {user === null ? loginPage() : blogPage()}
     </div>
   )
 }
