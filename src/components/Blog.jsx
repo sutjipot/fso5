@@ -1,30 +1,37 @@
-import { useState, useEffect } from 'react'
-import { Button } from './small'
-import { BlogThings } from './BlogThings'
+import { useState, useEffect } from "react";
+import { Button } from "./small";
+import { BlogThings } from "./BlogThings";
+import { useNotification } from "../NotificationContext";
 
-
-export const Blog = ({ blog, blogs, user, setBlogs, showSuccess, showError }) => {
-  const [details, setDetails] = useState(false)
-  const toggleShow = () => setDetails(!details)
-
+export const Blog = ({ blog, blogs, user, setBlogs }) => {
+  const [details, setDetails] = useState(false);
+  const toggleShow = () => setDetails(!details);
+  const { showSuccess, showError } = useNotification();
 
   const blogButton = (
-    < Button
-      className='blogButton'
-      type='button'
+    <Button
+      className="blogButton"
+      type="button"
       onClick={toggleShow}
       text={blog.title}
     />
-  )
-
+  );
 
   return (
-    <div className='blog'>
+    <div className="blog">
       {blogButton}
-      {details && <BlogThings blog={blog} blogs={blogs} user={user} setBlogs={setBlogs} showSuccess={showSuccess} showError={showError} />}
+      {details && (
+        <BlogThings
+          blog={blog}
+          blogs={blogs}
+          user={user}
+          setBlogs={setBlogs}
+          showSuccess={showSuccess}
+          showError={showError}
+        />
+      )}
     </div>
-  )
-}
+  );
+};
 
-
-export default Blog
+export default Blog;

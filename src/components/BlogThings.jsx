@@ -1,22 +1,65 @@
-import { Button } from './small'
-import { useState, useEffect } from 'react'
-import { handleLike, handleRemoveBlog } from './BlogActions'
+import { Button } from "./small";
+import { useState, useEffect } from "react";
+import { handleLike, handleRemoveBlog } from "./BlogActions";
+import { useNotification } from "../NotificationContext";
 
-
-export const BlogThings = ({ blog, blogs, setBlogs, showSuccess, showError, user }) => {
-  const [userOwner, setUserOwner] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
+export const BlogThings = ({ blog, blogs, setBlogs, user }) => {
+  const [userOwner, setUserOwner] = useState(false);
+  const [likes, setLikes] = useState(blog.likes);
+  const { showError, showSuccess } = useNotification();
 
   useEffect(() => {
-    setUserOwner(user.username === blog.user.username)
-  }, [user.username, blog.user.username])
+    setUserOwner(user.username === blog.user.username);
+  }, [user.username, blog.user.username]);
 
-  const authorFormat = <li className='content'> <b>Author: </b> {blog.author} </li>
-  const titleFormat = <li className='content'> <b>Title: </b> {blog.title} </li>
-  const urlFormat = <li> <b>URL: </b> {blog.url} </li>
-  const likesFormat = <li> <b>Likes: </b> {likes} <Button type='button' className='likeButton' onClick={() => handleLike(blog, setLikes, showError, showSuccess)} text='Like' /> </li>
-  const userFormat = <li> <b>User: </b> {blog.user.name} </li>
-  const removeButtonFormat = <p><Button type='button' className='deleteButton' onClick={() => handleRemoveBlog(blog, blogs, setBlogs, showError, showSuccess)} text='Remove' /></p>
+  const authorFormat = (
+    <li className="content">
+      {" "}
+      <b>Author: </b> {blog.author}{" "}
+    </li>
+  );
+  const titleFormat = (
+    <li className="content">
+      {" "}
+      <b>Title: </b> {blog.title}{" "}
+    </li>
+  );
+  const urlFormat = (
+    <li>
+      {" "}
+      <b>URL: </b> {blog.url}{" "}
+    </li>
+  );
+  const likesFormat = (
+    <li>
+      {" "}
+      <b>Likes: </b> {likes}{" "}
+      <Button
+        type="button"
+        className="likeButton"
+        onClick={() => handleLike(blog, setLikes, showError, showSuccess)}
+        text="Like"
+      />{" "}
+    </li>
+  );
+  const userFormat = (
+    <li>
+      {" "}
+      <b>User: </b> {blog.user.name}{" "}
+    </li>
+  );
+  const removeButtonFormat = (
+    <p>
+      <Button
+        type="button"
+        className="deleteButton"
+        onClick={() =>
+          handleRemoveBlog(blog, blogs, setBlogs, showError, showSuccess)
+        }
+        text="Remove"
+      />
+    </p>
+  );
 
   return (
     <div>
@@ -29,5 +72,5 @@ export const BlogThings = ({ blog, blogs, setBlogs, showSuccess, showError, user
         {userOwner ? removeButtonFormat : null}
       </ul>
     </div>
-  )
-}
+  );
+};
