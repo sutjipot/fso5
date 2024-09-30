@@ -14,9 +14,11 @@ import { useNotification } from "./NotificationContext";
 import { NotificationProvider } from "./NotificationContext";
 import QueryProvider from "./QueryProvider";
 import { useQuery } from "@tanstack/react-query";
+import { UserProvider, useUser } from "./UserContext";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const { state, setUser, logoutUser } = useUser();
+  const { user } = state;
   const {
     state: { successMessage, errorMessage },
     showSuccess,
@@ -163,7 +165,9 @@ const App = () => {
 const Wrapped = () => (
   <QueryProvider>
     <NotificationProvider>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </NotificationProvider>
   </QueryProvider>
 );

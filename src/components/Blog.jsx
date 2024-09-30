@@ -25,7 +25,7 @@ export const Blog = ({ blog, user, setBlogs }) => {
       showSuccess(`Liked blog "${data.title}" by ${data.author}`);
     },
     onError: (error) => {
-      showError(error.response);
+      showError(error.response?.data?.error || "Failed to like blog");
     },
   });
 

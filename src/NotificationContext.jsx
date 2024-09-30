@@ -1,10 +1,15 @@
 import React, { createContext, useReducer, useContext } from "react";
 
-const show_success = "SHOW_SUCCESS";
-const show_error = "SHOW_ERROR";
-const clear_notification = "CLEAR_NOTIFICATIONS";
+const show_success = "show_success";
+const show_error = "show_error";
+const clear_notification = "clear_notification";
 
 const NotificationContext = createContext();
+
+const initialState = {
+  successMessage: null,
+  errorMessage: null,
+};
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
@@ -20,10 +25,7 @@ const notificationReducer = (state, action) => {
 };
 
 export const NotificationProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(notificationReducer, {
-    successMessage: null,
-    errorMessage: null,
-  });
+  const [state, dispatch] = useReducer(notificationReducer, initialState);
 
   const showSuccess = (message) => {
     dispatch({ type: show_success, payload: message });

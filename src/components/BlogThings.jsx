@@ -1,75 +1,57 @@
 import { Button } from "./small";
-import { useState, useEffect } from "react";
-import { likeBlog, removeBlog } from "./BlogActions";
 
 export const BlogThings = ({ blog, user, likeMutation, removeMutation }) => {
-  const [userOwner, setUserOwner] = useState(false);
-  const [likes, setLikes] = useState(blog.likes);
+  const isUser = user.username === blog.user.username;
 
-  useEffect(() => {
-    setUserOwner(user.username === blog.user.username);
-  }, [user.username, blog.user.username]);
+  const handleLike = () => {
+    likeMutation.mutate();
+  };
 
-  const authorFormat = (
-    <li className="content">
-      {" "}
-      <b>Author: </b> {blog.author}{" "}
-    </li>
-  );
-  const titleFormat = (
-    <li className="content">
-      {" "}
-      <b>Title: </b> {blog.title}{" "}
-    </li>
-  );
-  const urlFormat = (
-    <li>
-      {" "}
-      <b>URL: </b> {blog.url}{" "}
-    </li>
-  );
-  const likesFormat = (
-    <li>
-      {" "}
-      <b>Likes: </b> {likes}{" "}
-      <Button
-        type="button"
-        className="likeButton"
-        onClick={() => {
-          likeBlog(blog, likeMutation);
-          setLikes(likes + 1);
-        }}
-        text="Like"
-      />{" "}
-    </li>
-  );
-  const userFormat = (
-    <li>
-      {" "}
-      <b>User: </b> {blog.user.name}{" "}
-    </li>
-  );
-  const removeButtonFormat = (
-    <p>
-      <Button
-        type="button"
-        className="deleteButton"
-        onClick={() => removeBlog(blog, removeMutation)}
-        text="Remove"
-      />
-    </p>
-  );
+  const handleRemove = () => {
+    if (
+      window.confirm(
+        `Are you sure you want to remove "${blog.title}" by ${blog.author}?`
+      )
+    ) {
+      removeMutation.mutate(blog.id);
+    }
+  };
 
   return (
     <div>
       <ul>
-        {titleFormat}
-        {authorFormat}
-        {urlFormat}
-        {likesFormat}
-        {userFormat}
-        {userOwner ? removeButtonFormat : null}
+        <li className="content">
+          <b>Title: </b> {blog.title}
+        </li>
+        <li className="content">
+          <b>Author: </b> {blog.author}
+        </li>
+        <li>
+          <b>URL: </b> {blog.url}
+        </li>
+        <li>
+          <b>Likes: </b> {blog.likes}
+          <Button
+            type="button"
+            className="likeButton"
+            onClick={handleLike}
+            text="Like"
+          />
+        </li>
+        <li>
+          <b>User: </b> {blog.user.name}
+          {isUser && (
+            <Button
+              type="button"
+              className="deleteButton"
+              onClick={handleRemove}
+              text="Remove"
+            />
+          )}
+        </li>
       </ul>
     </div>
   );
 };
+
+export default BlogThings;
