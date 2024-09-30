@@ -12,9 +12,10 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import { useNotification } from "./NotificationContext";
 import { NotificationProvider } from "./NotificationContext";
+import QueryProvider from "./QueryProvider";
+import { useQuery } from "@tanstack/react-query";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const {
     state: { successMessage, errorMessage },
@@ -26,12 +27,13 @@ const App = () => {
     cursor: "pointer",
   };
 
+  const blogFormRef = useRef();
+
   // get all blogs
-  useEffect(() => {
-    blogService.getAll().then((initialBlogs) => {
-      setBlogs(initialBlogs);
-    });
-  }, []);
+  const { data: blogs = [], refetch } = useQuery({
+    queryKey: "blogs",
+    queryFn: blogService.getAll,
+  });
 
   // get logged user
   useEffect(() => {
@@ -76,14 +78,13 @@ const App = () => {
   };
 
   // handle create blog
-  const blogFormRef = useRef();
   const handleCreateBlog = (blogObjects) => {
     blogFormRef.current.toggleVisibility();
 
     blogService
       .create(blogObjects)
       .then((createdBlog) => {
-        setBlogs(blogs.concat(createdBlog));
+        refetch();
         showSuccess(
           `A new blog "${createdBlog.title}" by ${createdBlog.author} added`
         );
@@ -119,7 +120,6 @@ const App = () => {
             key={blog.id}
             blog={blog}
             blogs={blogs}
-            setBlogs={setBlogs}
             user={user}
             showSuccess={showSuccess}
             showError={showError}
@@ -161,9 +161,11 @@ const App = () => {
 };
 
 const Wrapped = () => (
-  <NotificationProvider>
-    <App />
-  </NotificationProvider>
+  <QueryProvider>
+    <NotificationProvider>
+      <App />
+    </NotificationProvider>
+  </QueryProvider>
 );
 
 export default Wrapped;

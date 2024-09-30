@@ -1,12 +1,10 @@
 import { Button } from "./small";
 import { useState, useEffect } from "react";
-import { handleLike, handleRemoveBlog } from "./BlogActions";
-import { useNotification } from "../NotificationContext";
+import { likeBlog, removeBlog } from "./BlogActions";
 
-export const BlogThings = ({ blog, blogs, setBlogs, user }) => {
+export const BlogThings = ({ blog, user, likeMutation, removeMutation }) => {
   const [userOwner, setUserOwner] = useState(false);
   const [likes, setLikes] = useState(blog.likes);
-  const { showError, showSuccess } = useNotification();
 
   useEffect(() => {
     setUserOwner(user.username === blog.user.username);
@@ -37,7 +35,10 @@ export const BlogThings = ({ blog, blogs, setBlogs, user }) => {
       <Button
         type="button"
         className="likeButton"
-        onClick={() => handleLike(blog, setLikes, showError, showSuccess)}
+        onClick={() => {
+          likeBlog(blog, likeMutation);
+          setLikes(likes + 1);
+        }}
         text="Like"
       />{" "}
     </li>
@@ -53,9 +54,7 @@ export const BlogThings = ({ blog, blogs, setBlogs, user }) => {
       <Button
         type="button"
         className="deleteButton"
-        onClick={() =>
-          handleRemoveBlog(blog, blogs, setBlogs, showError, showSuccess)
-        }
+        onClick={() => removeBlog(blog, removeMutation)}
         text="Remove"
       />
     </p>
